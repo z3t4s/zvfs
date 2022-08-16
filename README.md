@@ -1,13 +1,15 @@
-# zvfs
+# zvfs ![example workflow](https://github.com/z3t4s/zvfs/actions/workflows/cmake.yml/badge.svg)
 Platform agnostic virtual file system
+
 
 - Leightweight
 - Doxygen compatible
 - Mostly exception safe, documented where it is not the case
 - Easy to integrate
+- Actual useful test coverage
 
-# Eaxmple
-Checkout [example.cpp](https://github.com/z3t4s/zvfs/blob/main/zvfs-tests/example.cpp) for the full .tar parsing example
+# Example
+Checkout [example.cpp](https://github.com/z3t4s/zvfs/blob/main/zvfs-tests/example.cpp) for the full .tar parsing code
 
 ```c++
 class tar_file : public zvfs::file

@@ -23,12 +23,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 add_subdirectory(zvfs-core)
 
-# Set Visual Studio startup project
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME}-tests)
-
 # Tests
 if(ZVFS_BUILD_TESTS)
     add_subdirectory(zvfs-tests)
     enable_testing()
     add_test(NAME zvfs-tests COMMAND "$<TARGET_FILE:zvfs-tests>")
+    
+    # Set Visual Studio startup project
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME}-tests)
 endif()

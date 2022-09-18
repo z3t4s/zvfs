@@ -307,7 +307,8 @@ DOCTEST_TEST_CASE("vfs recursive find")
 
 	// Find should return the amount stored in the out vector
 	//
-	CHECK(vfs->find(".txt", nodes) == nodes.size());
+	auto result = vfs->find(".txt", nodes);
+	CHECK(result == nodes.size());
 
 	// The amount of nodes in the out vector should match our dummy filesystem
 	//

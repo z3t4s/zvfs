@@ -236,7 +236,6 @@ DOCTEST_TEST_CASE("vfs node insertion and deletion")
 	CHECK(g_has_destructor_been_called_at_least_once == true);
 }
 
-
 DOCTEST_TEST_CASE("vfs node insertion of illegal nodes")
 {
 	zvfs::vfs* vfs = new zvfs::vfs(zvfs::settings::g_default_settings);
@@ -266,6 +265,53 @@ DOCTEST_TEST_CASE("vfs node insertion of illegal nodes")
 	// Try to remove an invalid path
 	//
 	CHECK(vfs->remove(illegal_conversion) == false);
+
+	delete vfs;
+}
+
+DOCTEST_TEST_CASE("vfs recursive find")
+{
+	std::vector<std::string> simulated_fs = {
+		"file1.png",
+		"folder1/",
+		"folder2/",
+		"folder2/file2.png",
+		"folder2/file2.png",
+		"folder2/file3.png",
+		"folder2/file4.txt",
+		"folder2/folder3/file5.png",
+		"folder2/folder3/folder4/file6.png",
+		"folder2/folder3/folder4/file6.txt",
+		"folder2/folder3/folder4txt/file7.txt",
+		"folder2/folder3/folder4txt/file8.png",
+		"file9"
+	};
+
+	zvfs::vfs* vfs = new zvfs::vfs(zvfs::settings::g_default_settings);
+
+	// Prepare the dummy fs
+	//
+	for (auto& it : simulated_fs)
+	{
+		zvfs::node_data** entry = vfs->add(it);
+		CHECK(entry != nullptr);
+
+		bool is_folder = (it.rfind("/") == it.size() - 1);
+		if (!is_folder)
+		{
+			*entry = new test_file();
+		}
+	}
+
+	std::vector<zvfs::node*> nodes;
+
+	// Find should return the amount stored in the out vector
+	//
+	CHECK(vfs->find(".txt", nodes) == nodes.size());
+
+	// The amount of nodes in the out vector should match our dummy filesystem
+	//
+	CHECK(nodes.size() == 3);
 
 	delete vfs;
 }

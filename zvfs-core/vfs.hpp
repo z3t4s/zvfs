@@ -3,6 +3,7 @@
 #include "node.hpp"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace zvfs
 {
@@ -96,6 +97,25 @@ namespace zvfs
 		* @overload
 		*/
 		[[nodiscard]] node* get(std::string& path);
+
+		/**
+		* Retrieves a list of nodes matching a query string on the path
+		*
+		* @param[in] filter		Substring of the node path
+		*						Example: ".txt", "file.extension" or "folder1/file.png"
+		*
+		* @returns				If the function succeeded it returns the number of found nodes matching the query
+		*						Returns -1 if the vfs couldn't be searched
+		* @exceptsafe no-throw
+		*/
+		[[nodiscard]] size_t find(std::string_view filter, std::vector<node*>& out_nodes);
+
+		/**
+		* Retrieves a list of nodes matching a query string on the path
+		*
+		* @overload
+		*/
+		[[nodiscard]] size_t find(std::string& filter, std::vector<node*>& out_nodes);
 
 		/**
 		* Retrieves the current settings of this instance

@@ -156,6 +156,46 @@ namespace zvfs
 	}
 
 	/**
+	* Retrieves a list of nodes matching a query string on the path
+	*
+	* @param[in] filter		Substring of the node path
+	*						Example: ".txt", "file.extension" or "folder1/file.png"
+	*
+	* @returns				If the function succeeded it returns the number of found nodes matching the query
+	*						Returns -1 if the vfs couldn't be searched
+	* @exceptsafe no-throw
+	*/
+	size_t vfs::find(std::string_view filter, std::vector<node*>& out_nodes)
+	{
+		if (!this->m_initialized)
+			return static_cast<size_t>(-1);
+
+		// We want to provide a clear indication if a file was found at all
+		//
+		out_nodes.clear();
+
+		for (auto it : this->m_nodes)
+		{
+			if (it.second->path().find(filter) != std::string::npos)
+				out_nodes.push_back(it.second);
+		}
+
+		return out_nodes.size();
+	}
+
+	/**
+	* Retrieves a list of nodes matching a query string on the path
+	*
+	* @overload
+	*/
+	size_t vfs::find(std::string& filter, std::vector<node*>& out_nodes)
+	{
+		// Implicitly convert std::string& to std::string_view via const char* argument
+		//
+		return this->find(filter.c_str(), out_nodes);
+	}
+
+	/**
 	* Retrieves the current settings of this instance
 	* 
 	* @returns				A pointer to the internal zvfs::vfs_settings object
